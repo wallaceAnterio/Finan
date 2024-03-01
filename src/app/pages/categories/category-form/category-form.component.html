@@ -6,14 +6,14 @@
     <li class="breadcrumb-item active">
       <a routerLink="/categories"></a>Categorias
     </li>
-    <li class="breadcrumb-item active">Formulario de categoria</li>
+    <li class="breadcrumb-item active">{{pageTitle}}</li>
   </ol>
 </nav>
 
 <div class="row mb-4">
   <div class="col-md">
     <h2 class="border-left ps-2">
-      Formulário de Categoria {{ currentAction }}
+      {{pageTitle}}
     </h2>
   </div>
 
@@ -24,7 +24,7 @@
   </div>
 </div>
 
-<form [formGroup]="categoryForm">
+<form [formGroup]="categoryForm" (submit)="submitForm()">
   <div class="card">
     <div class="card-header">Informações sobre a categoria</div>
 
@@ -32,18 +32,42 @@
       <div class="row g-3">
         <div class="form-group col-md-4 col">
           <label for="name">Nome</label>
-          <input type="text" class="form-control" id="name" />
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            formControlName="name"
+          />
+
+          <div class="text-danger" *ngIf="categoryForm.get('name')?.invalid &&
+              categoryForm.get('name')?.touched">
+            <div *ngIf="categoryForm.get('name')?.errors?.['required']">
+              dado obrigatório!
+            </div>
+            <div *ngIf="categoryForm.get('name')?.errors?.['minlength']">
+              deve ter no minimo 2 caracteres
+            </div>
+          </div>
         </div>
 
         <div class="form-group col-md-8">
           <label for="description">Descrição</label>
-          <input type="text" class="form-control" id="description" />
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            formControlName="description"
+          />
         </div>
       </div>
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary btn-lg float-end mt-3">
+  <button
+    [disabled]="submittingForm || categoryForm.invalid"
+    type="submit"
+    class="btn btn-primary btn-lg float-end mt-3"
+  >
     Salvar
   </button>
 </form>
