@@ -36,7 +36,8 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.setPageTitle();
   }
 
-  setCurrentAction() {
+  // Private Methods
+  private setCurrentAction() {
     if (this.actRoute.snapshot.url[0].path == 'new') {
       this.currentAction = 'new';
     } else {
@@ -44,7 +45,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  buildCategoryForm() {
+  private buildCategoryForm() {
     this.categoryForm = this.formBuider.group({
       id: [null],
       name: [null, [Validators.required, Validators.minLength(2)]],
@@ -52,7 +53,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  loadCategory() {
+  private loadCategory() {
     if (this.currentAction == 'edit') {
       this.actRoute.paramMap
         .pipe(
@@ -72,11 +73,11 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  setPageTitle() {
+  private setPageTitle() {
     if (this.currentAction == 'new') {
       this.pageTitle = 'Cadastro de Nova Categoria';
     } else {
-      const categoryName = this.category.name || ''; 
+      const categoryName = this.category.name || '';
       this.pageTitle = 'Editando Categoria: ' + categoryName;
     }
   }
