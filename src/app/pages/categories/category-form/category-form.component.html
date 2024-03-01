@@ -12,7 +12,9 @@
 
 <div class="row mb-4">
   <div class="col-md">
-    <h2 class="border-left ps-2">Formulário de Categoria</h2>
+    <h2 class="border-left ps-2">
+      Formulário de Categoria {{ currentAction }}
+    </h2>
   </div>
 
   <div class="col-md">
@@ -22,7 +24,7 @@
   </div>
 </div>
 
-<form>
+<form [formGroup]="categoryForm">
   <div class="card">
     <div class="card-header">Informações sobre a categoria</div>
 
@@ -41,5 +43,7 @@
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary btn-lg float-end mt-3">Salvar</button>
+  <button type="submit" class="btn btn-primary btn-lg float-end mt-3">
+    Salvar
+  </button>
 </form>
