@@ -45,7 +45,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
       this.createCategory();
     } else {
       this.updateCategory();
-      
     }
   }
 
@@ -140,5 +139,13 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.toastr.error('Ocorreu um erro ao processar a sua solicitação!');
 
     this.submittingForm = false;
+
+    if (error.status === 422) {
+      this.serverErrorMessages = JSON.parse(error._body).console.errors;
+    } else {
+      this.serverErrorMessages = [
+        'Falha na comunicação com o servidor. Por favor tente mais tarde',
+      ];
+    }
   }
 }

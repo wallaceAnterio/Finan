@@ -6,14 +6,14 @@
     <li class="breadcrumb-item active">
       <a routerLink="/categories"></a>Categorias
     </li>
-    <li class="breadcrumb-item active">{{pageTitle}}</li>
+    <li class="breadcrumb-item active">{{ pageTitle }}</li>
   </ol>
 </nav>
 
 <div class="row mb-4">
   <div class="col-md">
     <h2 class="border-left ps-2">
-      {{pageTitle}}
+      {{ pageTitle }}
     </h2>
   </div>
 
@@ -39,8 +39,13 @@
             formControlName="name"
           />
 
-          <div class="text-danger" *ngIf="categoryForm.get('name')?.invalid &&
-              categoryForm.get('name')?.touched">
+          <div
+            class="text-danger"
+            *ngIf="
+              categoryForm.get('name')?.invalid &&
+              categoryForm.get('name')?.touched
+            "
+          >
             <div *ngIf="categoryForm.get('name')?.errors?.['required']">
               dado obrigatório!
             </div>
@@ -61,6 +66,13 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="alert alert-danger mt-4" *ngIf="serverErrorMessages">
+    <strong>Error no servidor</strong>
+    <ul>
+      <li *ngFor="let error of serverErrorMessages">{{ error }}</li>
+    </ul>
   </div>
 
   <button
