@@ -1,26 +1,19 @@
 <nav class="mb-5">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a routerLink="/">Home</a>
-    </li>
-    <li class="breadcrumb-item active">
-      <a routerLink="/entries"></a>Lançamentos
-    </li>
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a routerLink="/entries">Lançamentos</a></li>
     <li class="breadcrumb-item active">{{ pageTitle }}</li>
   </ol>
 </nav>
 
 <div class="row mb-4">
-  <div class="col-md">
-    <h2 class="border-left ps-2">
+  <div class="col-md-9">
+    <h1 class="h2 border-left pl-2">
       {{ pageTitle }}
-    </h2>
+    </h1>
   </div>
-
-  <div class="col-md">
-    <a routerLink="new" class="btn btn-light float-end">
-      <a routerLink="/entries"> << Voltar</a>
-    </a>
+  <div class="col-md-3">
+    <a routerLink="/entries" class="btn btn-light float-right"> << Voltar </a>
   </div>
 </div>
 
@@ -30,8 +23,36 @@
 
     <div class="card-body">
       <div class="row g-3">
-        <div class="form-group col-md-4 col">
-          <label for="name">Nome</label>
+        <!-- type -->
+        <div class="form-group col-md-2">
+          <label for="type">Tipo</label>
+
+          <select
+            name="type"
+            id="type"
+            formControlName="type"
+            class="form-control"
+          >
+            <option *ngFor="let option of typeOptions" [value]="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('type')?.invalid && entryForm.get('type')?.touched
+            "
+          >
+            <div *ngIf="entryForm.get('type')?.errors?.['required']">
+              dado obrigatório
+            </div>
+          </div>
+        </div>
+
+        <!-- name -->
+        <div class="form-group col-md-5">
+          <label for="name">Lançamento</label>
           <input
             type="text"
             class="form-control"
@@ -46,15 +67,130 @@
             "
           >
             <div *ngIf="entryForm.get('name')?.errors?.['required']">
-              dado obrigatório!
+              dado obrigatório
             </div>
             <div *ngIf="entryForm.get('name')?.errors?.['minlength']">
-              deve ter no minimo 2 caracteres
+              deve ter no mínimo 2 caracteres
             </div>
           </div>
         </div>
 
-        <div class="form-group col-md-8">
+        <!-- amount -->
+        <div class="form-group col-md-3">
+          <label for="amount">Valor</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text">R$</span>
+            <input
+              [imask]="imaskConfig"
+              type="text"
+              class="form-control text-end"
+              formControlName="amount"
+            />
+          </div>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('amount')?.invalid &&
+              entryForm.get('amount')?.touched
+            "
+          >
+            <div *ngIf="entryForm.get('amount')?.errors?.['required']">
+              dado obrigatório
+            </div>
+          </div>
+        </div>
+
+        <!-- date -->
+        <div class="form-group col-md-2">
+          <label for="date">Data</label>
+          <p-calendar
+            id="date"
+            formControlName="date"
+            inputStyleClass="form-control"
+            dataType="string"
+            dateFormat="dd/mm/yy"
+            [locale]="ptBR"
+            [showButtonBar]="true"
+          >
+          </p-calendar>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('date')?.invalid && entryForm.get('date')?.touched
+            "
+          >
+            <div *ngIf="entryForm.get('date')?.errors?.['required']">
+              dado obrigatório
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- paid -->
+        <div class="form-group col-md-3">
+          <label for="paid">Pago</label>
+          <div class="btn-group">
+            <label
+              (click)="entryForm.get('paid')?.setValue(true)"
+              [class.active]="entryForm.get('paid')?.value == true"
+              class="btn btn-outline-info"
+            >
+              Pago
+            </label>
+            <label
+              (click)="entryForm.get('paid')?.setValue(false)"
+              [class.active]="entryForm.get('paid')?.value == false"
+              class="btn btn-outline-info"
+            >
+              Pendente
+            </label>
+          </div>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('paid')?.invalid && entryForm.get('paid')?.touched
+            "
+          >
+            <div *ngIf="entryForm.get('paid')?.errors?.['required']">
+              dado obrigatório
+            </div>
+          </div>
+        </div>
+
+        <!-- categoryId -->
+        <div class="form-group col-md-3">
+          <label for="categoryId">Categoria</label>
+
+          <select
+            name="categoryId"
+            id="categoryId"
+            formControlName="categoryId"
+            class="form-control"
+          >
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('categoryId')?.invalid &&
+              entryForm.get('categoryId')?.touched
+            "
+          >
+            <div *ngIf="entryForm.get('categoryId')?.errors?.['required']">
+              dado obrigatório
+            </div>
+          </div>
+        </div>
+
+        <!-- description -->
+        <div class="form-group col-md-7">
           <label for="description">Descrição</label>
           <input
             type="text"
@@ -68,7 +204,7 @@
   </div>
 
   <div class="alert alert-danger mt-4" *ngIf="serverErrorMessages">
-    <strong>Error no servidor</strong>
+    <strong>Erro no servidor:</strong>
     <ul>
       <li *ngFor="let error of serverErrorMessages">{{ error }}</li>
     </ul>
@@ -77,8 +213,10 @@
   <button
     [disabled]="submittingForm || entryForm.invalid"
     type="submit"
-    class="btn btn-primary btn-lg float-end mt-3"
+    class="btn btn-primary btn-lg float-right mt-3"
   >
     Salvar
   </button>
 </form>
+
+<pre>{{entry.paidText | json}}</pre>
