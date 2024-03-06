@@ -17,7 +17,7 @@ export class EntryListComponent implements OnInit {
   ngOnInit(): void {
     this.entryService.getAll().subscribe({
       next: (entries) => {
-        this.entries = entries;
+        this.entries = entries.sort((a, b) => b.id! - a.id!);
         console.log(entries);
       },
       error: (error) => console.log(error),
@@ -31,9 +31,7 @@ export class EntryListComponent implements OnInit {
         .delete(entry)
         .subscribe(
           () =>
-            (this.entries = this.entries.filter(
-              (element) => element != entry
-            ))
+            (this.entries = this.entries.filter((element) => element != entry))
         );
     }
   }

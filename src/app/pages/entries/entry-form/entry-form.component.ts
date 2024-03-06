@@ -47,7 +47,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   get typeOptions(): Array<any> {
-    return Object.entries(Entry.types).map(([value, text]) => {
+    return Object.entries(Entry.types).map(
+      ([value, text]) => {
       return {
         text: text,
         value: value,
@@ -131,10 +132,10 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   private setPageTitle() {
     if (this.currentAction == 'new') {
-      this.pageTitle = 'Cadastro de Nova Categoria';
+      this.pageTitle = 'Cadastro de Novo Lançamento';
     } else {
       const entryName = this.entry.name || '';
-      this.pageTitle = 'Editando Categoria: ' + entryName;
+      this.pageTitle = 'Editando Lançamento: ' + entryName;
     }
   }
 
@@ -156,6 +157,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
     this.entryService.update(entry).subscribe({
       next: (entry) => {
+        console.log(entry)
         this.actionForSuccess(entry);
       },
       error: (error) => {
