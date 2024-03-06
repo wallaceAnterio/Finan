@@ -1,0 +1,84 @@
+<nav class="mb-5">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/">Home</a>
+    </li>
+    <li class="breadcrumb-item active">
+      <a routerLink="/entries"></a>Lançamentos
+    </li>
+    <li class="breadcrumb-item active">{{ pageTitle }}</li>
+  </ol>
+</nav>
+
+<div class="row mb-4">
+  <div class="col-md">
+    <h2 class="border-left ps-2">
+      {{ pageTitle }}
+    </h2>
+  </div>
+
+  <div class="col-md">
+    <a routerLink="new" class="btn btn-light float-end">
+      <a routerLink="/entries"> << Voltar</a>
+    </a>
+  </div>
+</div>
+
+<form [formGroup]="entryForm" (submit)="submitForm()">
+  <div class="card">
+    <div class="card-header">Informações sobre o Lançamento</div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="form-group col-md-4 col">
+          <label for="name">Nome</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            formControlName="name"
+          />
+
+          <div
+            class="text-danger"
+            *ngIf="
+              entryForm.get('name')?.invalid && entryForm.get('name')?.touched
+            "
+          >
+            <div *ngIf="entryForm.get('name')?.errors?.['required']">
+              dado obrigatório!
+            </div>
+            <div *ngIf="entryForm.get('name')?.errors?.['minlength']">
+              deve ter no minimo 2 caracteres
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-8">
+          <label for="description">Descrição</label>
+          <input
+            type="text"
+            class="form-control"
+            id="description"
+            formControlName="description"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-danger mt-4" *ngIf="serverErrorMessages">
+    <strong>Error no servidor</strong>
+    <ul>
+      <li *ngFor="let error of serverErrorMessages">{{ error }}</li>
+    </ul>
+  </div>
+
+  <button
+    [disabled]="submittingForm || entryForm.invalid"
+    type="submit"
+    class="btn btn-primary btn-lg float-end mt-3"
+  >
+    Salvar
+  </button>
+</form>
