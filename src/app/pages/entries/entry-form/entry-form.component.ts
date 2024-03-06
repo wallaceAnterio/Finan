@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { switchMap } from 'rxjs';
 import { Category } from '../../categories/shared/category.model';
+import { CategoryService } from '../../categories/shared/category.service';
 import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
-import { CategoryService } from '../../categories/shared/category.service';
 
 @Component({
   selector: 'app-entry-form',
@@ -169,8 +169,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
     // redirect/reload component page
     this.router
-      .navigateByUrl('categories', { skipLocationChange: true })
-      .then(() => this.router.navigate(['categories', entry.id, 'edit']));
+      .navigateByUrl('entries', { skipLocationChange: true })
+      .then(() => this.router.navigate(['entries', entry.id, 'edit']));
   }
 
   private actionForError(error: any) {
@@ -186,4 +186,6 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       ];
     }
   }
+
+  
 }

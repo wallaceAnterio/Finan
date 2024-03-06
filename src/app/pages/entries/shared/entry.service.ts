@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable, map, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 
+import { CategoryService } from '../../categories/shared/category.service';
 import { Entry } from './entry.model';
 
 @Injectable({
@@ -12,7 +13,10 @@ import { Entry } from './entry.model';
 export class EntryService {
   private apiPath = 'api/entries';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private categoryService: CategoryService
+  ) {}
 
   getAll(): Observable<Entry[]> {
     return this.http
@@ -29,17 +33,37 @@ export class EntryService {
   }
 
   create(entry: Entry): Observable<Entry> {
-    return this.http
-      .post(this.apiPath, entry)
-      .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+    // entry.categoryId // 1 => Morada
+    // entry.category = category // null / antes da alteração estava retornando null
+
+    // criando um relacionamento entre uma entrade de despesa/receita com a categoria.
+    // criando uma relação entre, o Entry/despesa/receita a category/categoria da despesa/receita, manualmente.
+    // estou fazendo essa configuração aui, porque estou utilizando o in-memory-web-api
+    //  TODO! Criar esse realcionamento no backend diréto. NO (.NET)
+    return this.categoryService.getById(entry.categoryId!).pipe(
+      mergeMap((category) => {
+        entry.category = category;
+
+        return this.http
+          .post(this.apiPath, entry)
+          .pipe(catchError(this.handleError), map(this.jsonDataToEntry));
+      })
+    );
   }
 
+  // segue o mesmo raciocinio que o método create
   update(entry: Entry): Observable<Entry> {
     const url = `${this.apiPath}/${entry.id}`;
 
-    return this.http.put(url, entry).pipe(
-      catchError(this.handleError),
-      map(() => entry)
+    return this.categoryService.getById(entry.categoryId!).pipe(
+      mergeMap((category) => {
+        entry.category = category;
+
+        return this.http.put(url, entry).pipe(
+          catchError(this.handleError),
+          map(() => entry)
+        );
+      })
     );
   }
 
