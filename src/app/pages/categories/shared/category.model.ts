@@ -1,7 +1,8 @@
 import { BaseResourceModel } from '../../../shared/models/base-resource-model';
 
 export class Category extends BaseResourceModel {
-  constructor(id?: number, name?: string, description?: string) {
+  constructor(
+    public override id?: number, public name?: string, public description?: string) {
     super();
   }
 }
