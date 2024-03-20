@@ -15,10 +15,13 @@ export class EntryListComponent implements OnInit {
   constructor(private entryService: EntryService) {}
 
   ngOnInit(): void {
+    this.listingEntries();
+  }
+
+  listingEntries() {
     this.entryService.getAll().subscribe({
       next: (entries) => {
         this.entries = entries.sort((a, b) => b.id! - a.id!);
-        console.log(entries);
       },
       error: (error) => console.log(error),
     });
