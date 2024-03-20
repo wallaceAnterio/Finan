@@ -129,6 +129,8 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   private actionForSuccess(category: Category) {
     this.toastr.success('Solicitação processada com sucesso!');
 
+    console.log(this.actRoute.snapshot.parent)
+
     // redirect/reload component page
     this.router
       .navigateByUrl('categories', { skipLocationChange: true })
