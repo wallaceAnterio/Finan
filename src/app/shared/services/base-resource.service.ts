@@ -49,8 +49,8 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     const url = `${this.apiPath}/${resource.id}`;
 
     return this.http.put(url, resource).pipe(
+      map(() => resource),
       catchError(this.handleError),
-      map(() => resource)
     );
   }
 
